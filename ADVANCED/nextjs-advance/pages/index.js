@@ -1,6 +1,5 @@
 import React from 'react'
 import MeetupList from '../components/meetups/MeetupList'
-import Layout from '../components/layout/Layout'
 
 
 const DUMMY_MEETUPS = [
@@ -30,11 +29,16 @@ const DUMMY_MEETUPS = [
 
 const HomePage = () => {
     return (
-        <Layout>
+       
             <MeetupList meetups = {DUMMY_MEETUPS} />
-        </Layout>
+        
         // we are rendering MeetupList which is not a page component in a page components
     )
 }
 
 export default HomePage
+
+//_app.js
+
+//This is the root component  for next js.
+//it takes two parameter component and props
