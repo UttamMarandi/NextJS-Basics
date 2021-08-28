@@ -115,3 +115,9 @@ export default HomePage
 //implements server side rendering
 //this is not visible to the browser , so important fot authentication and sensitive data code
 //no revalidate key
+
+//API ROUTES
+//api routes are special pages which don't return html but accept incoming http request , post update delete request, store data or retrive data from json
+//api routes helps in building api end points
+//stored in api folder in pages folder
+
