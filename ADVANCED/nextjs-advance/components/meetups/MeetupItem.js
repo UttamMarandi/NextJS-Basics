@@ -6,6 +6,7 @@ function MeetupItem(props) {
   const router = useRouter()
 
   const showDetailsHandler = (props) => {
+    console.log("props.id", props.id);
     // router.query gives the exact path of the url
     //router.push (/path_name) is equivalent to Link component with path_name 
     router.push('/' + props.id);
