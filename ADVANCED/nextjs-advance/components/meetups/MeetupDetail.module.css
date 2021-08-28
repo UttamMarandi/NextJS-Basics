@@ -1,0 +1,8 @@
+/* Any css written here is scopped to MeetupDetail.js */
+.detail {
+  text-align: center;
+}
+
+.detail img {
+  width: 100%;
+}
