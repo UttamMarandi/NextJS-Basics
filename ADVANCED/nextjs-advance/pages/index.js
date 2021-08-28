@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import MeetupList from '../components/meetups/MeetupList'
+import { useEffect } from 'react'
 
 
 const DUMMY_MEETUPS = [
@@ -27,14 +28,62 @@ const DUMMY_MEETUPS = [
     
 ]
 
-const HomePage = () => {
+const HomePage = (props) => {
+   
+    // const [loadedMeetups, setLoadedMeetups] = useState([])
+    //send a http requset to fetch data
+    //useEffect runs after the component is rendered
+    //SO when data is fetch first the component is loaded and user might see a loading screen and then after loaderMeetups gets value (i.e state changed) then useEffect runs to show the data to ui
+    //we we have two component cycles. This is bad for seo
+    // useEffect(()=>{
+        
+    //     setLoadedMeetups(DUMMY_MEETUPS)
+    // },[])
     return (
        
-            <MeetupList meetups = {DUMMY_MEETUPS} />
+            <MeetupList meetups = {props.meetups} />
         
         // we are rendering MeetupList which is not a page component in a page components
     )
 }
+
+export async function getStaticProps() {
+    //all the asynchronous code goes here
+    //this code will not run in client's browser or in server. It will run only in dev enviroment
+    //after fetching the data from api, we need to return an object to getStatciProps
+
+    return {
+        props: {
+            meetups: DUMMY_MEETUPS
+        },
+        revalidate: 3600 //regenerate after 1hour 
+    }
+    //the object witin return will have props key which contains the data that we recieve afer fetch
+    //props is the send as a parameter to page component
+    //In this way we don't need to maintain state
+    //so no use of useState or useEffect in our page component
+
+    //revalidate : 
+    //revalidate props will take number that takes time in s after which it will regenerates the page for an incoming request
+    //so it will not just be generated during build time but also after the time provided if request are coming in for this page
+}
+
+
+// export async function getServerSideProps(context) {
+//     //server side rendering
+//     //return data from api
+//     const req = context.req;
+//     const res = context.res;
+//     //getServerSideProps can take context parameter which takes the request and response object
+//     //helpful for authentication
+
+//     return {
+//         props : {
+//             meetups : DUMMY_MEETUPS
+//         }
+//     }
+// }
+
 
 export default HomePage
 
@@ -42,3 +91,27 @@ export default HomePage
 
 //This is the root component  for next js.
 //it takes two parameter component and props
+
+
+//Page Pre Rendering
+//Next.js offers two types of page pre rendering
+//1.Static generation
+//2.Server side rendering
+
+//1.Static generation
+//page component is pre-rendered when we build the application
+//if page content does not change all the time , then static generation is best
+
+//getStaticProps()
+//getStaticProps function is exported from pages. Only components within pages folder can access getStatciProps()
+
+//Cons of static site generation : SSG
+//data can be outdated
+
+
+//2.Server-side rendering
+//It regenerate the page for every incoming request
+//getServerSideProps()
+//implements server side rendering
+//this is not visible to the browser , so important fot authentication and sensitive data code
+//no revalidate key
