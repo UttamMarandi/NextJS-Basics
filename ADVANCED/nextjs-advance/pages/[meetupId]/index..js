@@ -1,16 +1,23 @@
 import React from 'react'
 import MeetupDetail from '../../components/meetups/MeetupDetail'
-import { MongoClient } from 'mongodb'
+import { MongoClient, ObjectId } from 'mongodb'
+import Head from "next/head"
 
 
 const MeetupDetails = (props) => {
     return (
+        <>
+        <Head>
+            <title>{props.meetupData.title}</title>
+            <meta name= "description" content = "Dynamic title exacample"/>
+        </Head>
         <MeetupDetail 
         image={props.meetupData.image} //props represent the return props from getStaticProps
         title = {props.meetupData.title}
         address ={props.meetupData.address}
         description = {props.meetupData.description}
         />
+        </>
     )
 }
 
@@ -70,21 +77,31 @@ export async function getStaticProps(context) {
 
     const meetupsCollection = db.collection("meetups")
 
-    const selectedMeetup = await meetupsCollection.findOne({_id : meetupId})
+    const selectedMeetup = await meetupsCollection.findOne({_id : ObjectId(meetupId)})
+
     //.findOne() searches for only one document
     //it takes a parameter which is an object which takes key : value pairs. findOne() use these key:valu pairs as filters and fetches any document that matches this key value pair
+    //ObjectID will convert meetipid to an object
     client.close()
     
     return {
         props: {
-            meetupData : selectedMeetup //selected meetup contains the single document that is fetched based on id
+            meetupData : {
+                id : selectedMeetup._id.toString(),
+                //.toString() b.c above we converted meetupId to an object
+                //selected meetup contains the single document that is fetched based on id
+                title : selectedMeetup.title,
+                address: selectedMeetup.address,
+                image: selectedMeetup.image,
+                description: selectedMeetup.description
         }
     }
 }
 
-export default MeetupDetails
-
-
+}
 //getStaticPaths
 //getStaticPath is required if we are using getStaticProps inside a dynamic page like [meetupId]
-//getsta
+
+
+export default MeetupDetails
+

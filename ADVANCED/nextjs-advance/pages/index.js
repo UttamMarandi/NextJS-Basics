@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import MeetupList from '../components/meetups/MeetupList'
 import { useEffect } from 'react'
 import { MongoClient } from 'mongodb'
-
+import Head from "next/head"
 
 const DUMMY_MEETUPS = [
     {
@@ -41,8 +41,13 @@ const HomePage = (props) => {
     //     setLoadedMeetups(DUMMY_MEETUPS)
     // },[])
     return (
-       
-            <MeetupList meetups = {props.meetups} />
+            <>  <Head>
+                    <title>NextJS Basics</title>
+                    <meta name = "description" content= "An introduction to nextJS basics"/>
+                </Head>
+                <MeetupList meetups = {props.meetups} />
+            </>
+            
         
         // we are rendering MeetupList which is not a page component in a page components
     )
@@ -141,3 +146,15 @@ export default HomePage
 //api routes helps in building api end points
 //stored in api folder in pages folder
 
+//ADD METADATA
+//next js offers Head module from "next/head" which allows us to us insert the Head component in our jsx 
+//we can write metadata within that Head component
+//Head component can be used in each pages in jsx
+
+
+//SUMMARY
+//Three main features of Next.js
+//File based routing
+//api router
+//server side rendering/static site generation
+//data fetching within getStaticProps or getServerSideProps
