@@ -3,13 +3,13 @@ import MeetupDetail from '../../components/meetups/MeetupDetail'
 import { MongoClient } from 'mongodb'
 
 
-const MeetupDetails = () => {
+const MeetupDetails = (props) => {
     return (
         <MeetupDetail 
-        image="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Matt_Damon_TIFF_2015.jpg/800px-Matt_Damon_TIFF_2015.jpg"
-        title = "First Meetup with Matt Damon"
-        address = "Street in Vegas"
-        description = "This is the first meetup"
+        image={props.meetupData.image} //props represent the return props from getStaticProps
+        title = {props.meetupData.title}
+        address ={props.meetupData.address}
+        description = {props.meetupData.description}
         />
     )
 }
@@ -77,14 +77,7 @@ export async function getStaticProps(context) {
     
     return {
         props: {
-            meetupData : {
-                id : meetupId,
-                image : "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Matt_Damon_TIFF_2015.jpg/800px-Matt_Damon_TIFF_2015.jpg",
-                title : "First Meetup with Matt Damon",
-                address : "Street in Vegas",
-                description : "This is the first meetup"
-                
-            }
+            meetupData : selectedMeetup //selected meetup contains the single document that is fetched based on id
         }
     }
 }
