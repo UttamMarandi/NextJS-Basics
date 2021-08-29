@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import MeetupList from '../components/meetups/MeetupList'
 import { useEffect } from 'react'
+import { MongoClient } from 'mongodb'
 
 
 const DUMMY_MEETUPS = [
@@ -52,9 +53,28 @@ export async function getStaticProps() {
     //this code will not run in client's browser or in server. It will run only in dev enviroment
     //after fetching the data from api, we need to return an object to getStatciProps
 
+    // We dont need to send a request to our own api
+     const client = await MongoClient.connect("mongodb+srv://takeitall007:<.gD'^B%B8s.g$%[_>@cluster0.qfuwd.mongodb.net/meetups?retryWrites=true&w=majority")
+        //this code should never be run on client side.
+        //so this is a secure place to use credentials
+    const db = client.db()
+
+    const meetupsCollection = db.collection("meetups")
+
+    const meetups = await meetupsCollection.find().toArray()
+    //.find() gets all the data from meetupsCollection and convert it into an array
+    client.close()
+
     return {
         props: {
-            meetups: DUMMY_MEETUPS
+            meetups: meetups.map((meetup)=>{
+                return {
+                title: meetup.title,
+                address : meetup.address,
+                image: meetup.image,
+                id : meetup._id.toString()
+                }
+            })
         },
         revalidate: 3600 //regenerate after 1hour 
     }
